@@ -1,56 +1,48 @@
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
 
 using namespace std;
-
-const int MAX = 20;
-int N, H;
-int x[MAX];
-int S[MAX]; 
-
-
 /*
     Ho va ten: Nguyen Hoang Nam
     MSSV: 20225213
-    Ma lop: 738920*/
-    
-int hammingDistance(int str1[], int str2[]){
-    int count = 0;
-    int len = N;
-    for(int i=0; i<len; i++){
-        if(str1[i] != str2[i]) count++;
-    }
-    return count;
-}
+    Ma lop: 738920
+    */
 
-void printsolution(){
-    if(hammingDistance(x,S) == H){
-        for(int i=0; i<N; i++)
-            cout << x[i];
-        cout << endl;
-    }
-}
-
-void TRY(int a){
-    if(a == N){
-        printsolution();
+//Hàm tạo chuỗi khoảng cách hamming
+void generateHammingString(string &s, int h, int pos, int currentDistance, vector<string> &result) {
+    //Khoảng cách Hamiing hiện tại bằng h thì đẩy vào vector
+    if (currentDistance == h) {
+        result.push_back(s);
         return;
     }
-    x[a] = 0;
-    TRY(a+1);
-    x[a] = 1;
-    TRY(a+1);
+    for (int i = pos; i < s.size(); i++) {
+        if (s[i] == '0') {
+            s[i] = '1';
+            generateHammingString(s, h, i + 1, currentDistance + 1, result);
+            s[i] = '0'; //Quay lui
+        }
+    }
 }
 
-int main(){
-    int T;
-    cin >> T;
-    while(T--){
-        cin >> N >> H;
-        for(int i=0; i<N; i++){
-            S[i] = 0;
-            x[i] = 0;
+int main() {
+    int t;
+    cin >> t;
+    bool test1 = true;
+    while (t != 0) {
+        int n, h;
+        cin >> n >> h;
+        string s(n, '0'); //Tạo chuỗi s độ dài n toàn 0
+        vector<string> result;
+        generateHammingString(s, h, 0, 0, result);
+
+        if (!test1) {
+            cout << endl; //Tạo dòng trống giữa các test case nêu không phải test đầu tiên
         }
-        TRY(0);
+
+        test1 = false;
+        for (auto v : result) {
+            cout << v << endl;
+        }
+        t--;
     }
+    return 0;
 }
